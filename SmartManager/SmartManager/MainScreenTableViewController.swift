@@ -26,14 +26,14 @@ class MainScreenTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath:  IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath) as! MainScreenTableViewCell
         
-        cell.textLabel?.text = tempArray[indexPath.row]
-        cell.imageView?.image = UIImage(named: "default_task")
+        cell.taskNameLabel.text = tempArray[indexPath.row]
+        cell.taskImage.image = UIImage(named: "default_task")
         
         // to make image view to be circle
-        cell.imageView?.layer.cornerRadius = cell.frame.size.height / 2
-        cell.imageView?.clipsToBounds = true
+        cell.taskImage.layer.cornerRadius = cell.taskImage.frame.size.height / 2
+        cell.taskImage.clipsToBounds = true
         
         return cell
     }
@@ -41,7 +41,7 @@ class MainScreenTableViewController: UITableViewController {
     // MARK: - Table view delegate
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90
+        return 85
     }
     
 }
