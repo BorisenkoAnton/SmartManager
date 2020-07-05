@@ -10,12 +10,21 @@ import UIKit
 
 class NewTaskTableViewController: UITableViewController {
 
+    var imageIsChanged = false
+    
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    
     @IBOutlet weak var taskImage: UIImageView!
+    @IBOutlet weak var taskNameTextField: UITextField!
+    @IBOutlet weak var taskLocationTextField: UITextField!
+    @IBOutlet weak var taskDatePicker: UIDatePicker!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.tableFooterView = UIView()
+        saveButton.isEnabled = false
+        taskNameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
     }
 
     // MARK: - Table view delegate
@@ -52,6 +61,35 @@ class NewTaskTableViewController: UITableViewController {
         }
     }
     
+    func saveNewTask() {
+        
+        var image: UIImage?
+        
+        if imageIsChanged {
+            image = taskImage.image
+        } else {
+            image = UIImage(named: "default_task")
+        }
+        
+        let imageData = image?.pngData()
+        
+        // date from picker to string
+        let date = taskDatePicker.date.description
+        
+        let newTask = Task(name: taskNameTextField.text!,
+                           location: taskLocationTextField.text,
+                           date: date,
+                           imageData: imageData)
+        
+        StorageManager.saveObject(newTask)
+
+    }
+    
+    @IBAction func cancelAction(_ sender: Any) {
+        dismiss(animated: true)
+    }
+    
+    
 }
 
 // MARK: - Text field delegate
@@ -63,9 +101,18 @@ extension NewTaskTableViewController: UISearchTextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
+    @objc private func textFieldChanged() {
+        
+        if taskNameTextField.text?.isEmpty == false {
+            saveButton.isEnabled = true
+        } else {
+            saveButton.isEnabled = false
+        }
+    }
 }
 
-// MARK: Work with image
+// MARK: - Work with image
 extension NewTaskTableViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func chooseImagePicker(source: UIImagePickerController.SourceType) {
@@ -80,9 +127,13 @@ extension NewTaskTableViewController: UIImagePickerControllerDelegate, UINavigat
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
         taskImage.image = info[.editedImage] as? UIImage
         taskImage.contentMode = .scaleAspectFill
         taskImage.clipsToBounds = true
+        
+        imageIsChanged = true
+        
         dismiss(animated: true)
     }
 }
