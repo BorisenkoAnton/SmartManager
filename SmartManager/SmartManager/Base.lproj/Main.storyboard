@@ -170,7 +170,7 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Task name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cmQ-bl-CYX">
+                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Task location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cmQ-bl-CYX">
                                                             <rect key="frame" x="0.0" y="36" width="382" height="27"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
@@ -234,13 +234,21 @@
                     <navigationItem key="navigationItem" title="New Task" id="X6Z-JJ-FAM">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="AhX-BP-NNr">
                             <connections>
-                                <segue destination="QAl-fs-Mnc" kind="unwind" unwindAction="cancelAction:" id="hzN-3w-awA"/>
+                                <action selector="cancelAction:" destination="NDy-zM-bBb" id="RJf-aU-GbG"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="dYc-9t-wE3"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="dYc-9t-wE3">
+                            <connections>
+                                <segue destination="QAl-fs-Mnc" kind="unwind" unwindAction="unwindSegue:" id="pHC-If-3Uj"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="saveButton" destination="dYc-9t-wE3" id="YW4-Gq-RYz"/>
+                        <outlet property="taskDatePicker" destination="c4U-gF-BxU" id="6gK-nx-mrN"/>
                         <outlet property="taskImage" destination="6lx-9j-SjL" id="ivT-ZH-boZ"/>
+                        <outlet property="taskLocationTextField" destination="cmQ-bl-CYX" id="T0W-1H-olB"/>
+                        <outlet property="taskNameTextField" destination="3FE-YA-8rK" id="fnf-4M-5ia"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tM7-9J-Naq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
