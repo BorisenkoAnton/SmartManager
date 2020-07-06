@@ -11,7 +11,7 @@ import UIKit
 class NewTaskTableViewController: UITableViewController {
 
     // variable to pass task to be modified
-    var currentTask: Task?
+    var currentTask: Task!
     
     var imageIsChanged = false
     
@@ -21,11 +21,12 @@ class NewTaskTableViewController: UITableViewController {
     @IBOutlet weak var taskNameTextField: UITextField!
     @IBOutlet weak var taskLocationTextField: UITextField!
     @IBOutlet weak var taskDatePicker: UIDatePicker!
+    @IBOutlet weak var ratingControl: RatingControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
         saveButton.isEnabled = false
         taskNameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         setupEditScreen()
@@ -87,7 +88,8 @@ class NewTaskTableViewController: UITableViewController {
         let newTask = Task(name: taskNameTextField.text!,
                            location: taskLocationTextField.text,
                            date: date,
-                           imageData: imageData)
+                           imageData: imageData,
+                           rating: Double(ratingControl.rating))
         
         if currentTask != nil {
             try! realm.write {
@@ -95,6 +97,7 @@ class NewTaskTableViewController: UITableViewController {
                 currentTask?.name = newTask.name
                 currentTask?.location = newTask.location
                 currentTask?.date = newTask.date
+                currentTask?.rating = newTask.rating
             }
         } else {
             StorageManager.saveObject(newTask)
@@ -121,6 +124,7 @@ class NewTaskTableViewController: UITableViewController {
             let date = dateFormatter.date(from: currentTask!.date)
 
             taskDatePicker.date = date!
+            ratingControl.rating = Int(currentTask.rating)
         }
     }
     
