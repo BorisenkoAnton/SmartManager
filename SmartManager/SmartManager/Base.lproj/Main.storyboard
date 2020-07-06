@@ -143,6 +143,23 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="120" id="K5k-f9-wYO">
+                                        <rect key="frame" x="0.0" y="548" width="414" height="120"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="K5k-f9-wYO" id="EzQ-JV-avk">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="120"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="252" placeholderIntrinsicHeight="44" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2Wl-RB-a4C" customClass="RatingControl" customModule="SmartManager" customModuleProvider="target">
+                                                    <rect key="frame" x="81" y="38" width="252" height="44"/>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="2Wl-RB-a4C" firstAttribute="centerY" secondItem="EzQ-JV-avk" secondAttribute="centerY" id="Abi-1G-3q4"/>
+                                                <constraint firstItem="2Wl-RB-a4C" firstAttribute="centerX" secondItem="EzQ-JV-avk" secondAttribute="centerX" id="o9G-gU-5Ma"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -164,6 +181,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="ratingControl" destination="2Wl-RB-a4C" id="Ca4-B2-WCO"/>
                         <outlet property="saveButton" destination="dYc-9t-wE3" id="YW4-Gq-RYz"/>
                         <outlet property="taskDatePicker" destination="c4U-gF-BxU" id="6gK-nx-mrN"/>
                         <outlet property="taskImage" destination="6lx-9j-SjL" id="ivT-ZH-boZ"/>
