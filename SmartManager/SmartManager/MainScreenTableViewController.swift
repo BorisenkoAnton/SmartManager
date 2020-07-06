@@ -11,30 +11,55 @@ import RealmSwift
 
 class MainScreenTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-
+    private let searchController = UISearchController(searchResultsController: nil)
+    private var tasks: Results<Task>!
+    private var filteredTasks: Results<Task>!
+    private var ascendingSorting = true
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    private var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var reversedSortingButton: UIBarButtonItem!
     
-    var tasks: Results<Task>!
-    var ascendingSorting = true
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tasks = realm.objects(Task.self)
+        
+        // Setup the search controller
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
     }
     
     // MARK: - Table view data source
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering {
+            return filteredTasks.count
+        }
         return tasks.isEmpty ? 0 : tasks.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath:  IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath) as! MainScreenTableViewCell
 
-        let task = tasks[indexPath.row]
+        var task = Task()
 
+        if isFiltering {
+            task = filteredTasks[indexPath.row]
+        } else {
+            task = tasks[indexPath.row]
+        }
+        
         cell.taskNameLabel.text = task.name
         cell.taskLocationLabel.text = task.location
         cell.taskDateLabel.text = task.date
@@ -48,6 +73,11 @@ class MainScreenTableViewController: UIViewController, UITableViewDataSource, UI
     }
 
     // MARK: - Table view delegate
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let task = tasks[indexPath.row]
@@ -65,7 +95,12 @@ class MainScreenTableViewController: UIViewController, UITableViewDataSource, UI
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            let task = tasks[indexPath.row]
+            var task: Task
+            if isFiltering {
+                task = filteredTasks[indexPath.row]
+            } else {
+                task = tasks[indexPath.row]
+            }
             let newTaskVC = segue.destination as! NewTaskTableViewController
             newTaskVC.currentTask = task
         }
@@ -108,4 +143,18 @@ class MainScreenTableViewController: UIViewController, UITableViewDataSource, UI
         tableView.reloadData()
     }
     
+}
+
+extension MainScreenTableViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+    
+    private func filterContentForSearchText(_ searchText: String) {
+        
+        filteredTasks = tasks.filter("name CONTAINS[c] %@ OR location CONTAINS[c] %@", searchText, searchText)
+        
+        tableView.reloadData()
+    }
 }
