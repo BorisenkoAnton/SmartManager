@@ -9,10 +9,15 @@
 import UIKit
 import RealmSwift
 
-class MainScreenTableViewController: UITableViewController {
+class MainScreenTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var reversedSortingButton: UIBarButtonItem!
     
     var tasks: Results<Task>!
-    
+    var ascendingSorting = true
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,11 +26,11 @@ class MainScreenTableViewController: UITableViewController {
     
     // MARK: - Table view data source
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tasks.isEmpty ? 0 : tasks.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath:  IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath:  IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath) as! MainScreenTableViewCell
 
         let task = tasks[indexPath.row]
@@ -42,8 +47,8 @@ class MainScreenTableViewController: UITableViewController {
         return cell
     }
 
-    // MARK: Table view delegate
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    // MARK: - Table view delegate
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let task = tasks[indexPath.row]
         let deleteAction = UITableViewRowAction(style: .default, title: "Delete") { (_, _) in
@@ -55,12 +60,52 @@ class MainScreenTableViewController: UITableViewController {
         return [deleteAction]
     }
     
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showDetail" {
+            guard let indexPath = tableView.indexPathForSelectedRow else { return }
+            let task = tasks[indexPath.row]
+            let newTaskVC = segue.destination as! NewTaskTableViewController
+            newTaskVC.currentTask = task
+        }
+    }
+    
     @IBAction func unwindSegue(_ segue: UIStoryboardSegue) {
 
         guard let newTaskVC = segue.source as? NewTaskTableViewController else { return }
         
-        newTaskVC.saveNewTask()
+        newTaskVC.saveTask()
         tableView.reloadData()
     }
 
+    @IBAction func sortSelection(_ sender: UISegmentedControl) {
+        
+        sorting()
+    }
+    
+    @IBAction func reversedSorting(_ sender: Any) {
+        
+        ascendingSorting.toggle()
+        
+        if ascendingSorting {
+            reversedSortingButton.image = #imageLiteral(resourceName: "AZ")
+        } else {
+            reversedSortingButton.image = #imageLiteral(resourceName: "ZA")
+        }
+        
+        sorting()
+    }
+    
+    private func sorting() {
+        
+        if segmentedControl.selectedSegmentIndex == 0 {
+            tasks = tasks.sorted(byKeyPath: "date", ascending: ascendingSorting)
+        } else {
+            tasks = tasks.sorted(byKeyPath: "name", ascending: ascendingSorting)
+        }
+        
+        tableView.reloadData()
+    }
+    
 }
