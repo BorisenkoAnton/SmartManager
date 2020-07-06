@@ -14,12 +14,14 @@ class Task: Object {
     @objc dynamic var location: String?
     @objc dynamic var date = ""
     @objc dynamic var imageData: Data?
+    @objc dynamic var rating = 0.0
     
-    convenience init(name: String, location: String?, date: String, imageData: Data?) {
+    convenience init(name: String, location: String?, date: String, imageData: Data?, rating: Double) {
         self.init()
         self.name = name
         self.location = location
         self.date = date
         self.imageData = imageData
+        self.rating = rating
     }
 }
