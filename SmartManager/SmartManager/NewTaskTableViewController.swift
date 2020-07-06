@@ -10,6 +10,9 @@ import UIKit
 
 class NewTaskTableViewController: UITableViewController {
 
+    // variable to pass task to be modified
+    var currentTask: Task?
+    
     var imageIsChanged = false
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -25,6 +28,7 @@ class NewTaskTableViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         saveButton.isEnabled = false
         taskNameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        setupEditScreen()
     }
 
     // MARK: - Table view delegate
@@ -61,7 +65,7 @@ class NewTaskTableViewController: UITableViewController {
         }
     }
     
-    func saveNewTask() {
+    func saveTask() {
         
         var image: UIImage?
         
@@ -73,16 +77,60 @@ class NewTaskTableViewController: UITableViewController {
         
         let imageData = image?.pngData()
         
-        // date from picker to string
-        let date = taskDatePicker.date.description
+        let dateFormatter = DateFormatter()
+        let dateTemplate = "yyyy/MM/dd hh:mm"
+        let dateLocale = Locale(identifier: "ru")
+        let dateFormat =  DateFormatter.dateFormat(fromTemplate: dateTemplate, options: 0, locale: dateLocale)
+        dateFormatter.dateFormat = dateFormat
+        let date = dateFormatter.string(from: taskDatePicker.date)
         
         let newTask = Task(name: taskNameTextField.text!,
                            location: taskLocationTextField.text,
                            date: date,
                            imageData: imageData)
         
-        StorageManager.saveObject(newTask)
+        if currentTask != nil {
+            try! realm.write {
+                currentTask?.imageData = newTask.imageData
+                currentTask?.name = newTask.name
+                currentTask?.location = newTask.location
+                currentTask?.date = newTask.date
+            }
+        } else {
+            StorageManager.saveObject(newTask)
+        }
 
+    }
+    
+    private func setupEditScreen() {
+        if currentTask != nil {
+            setupNavigationBar()
+            imageIsChanged = true
+            guard let data = currentTask?.imageData, let image = UIImage(data: data) else { return }
+            
+            taskImage.image = image
+            taskImage.contentMode = .scaleAspectFill
+            taskNameTextField.text = currentTask?.name
+            taskLocationTextField.text = currentTask?.location
+            
+            let dateFormatter = DateFormatter()
+            let dateTemplate = "yyyy/MM/dd hh:mm"
+            let dateLocale = Locale(identifier: "ru")
+            let dateFormat =  DateFormatter.dateFormat(fromTemplate: dateTemplate, options: 0, locale: dateLocale)
+            dateFormatter.dateFormat = dateFormat
+            let date = dateFormatter.date(from: currentTask!.date)
+
+            taskDatePicker.date = date!
+        }
+    }
+    
+    private func setupNavigationBar() {
+        if let topItem = navigationController?.navigationBar.topItem {
+            topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        }
+        navigationItem.leftBarButtonItem = nil
+        title = currentTask?.name
+        saveButton.isEnabled = true
     }
     
     @IBAction func cancelAction(_ sender: Any) {
