@@ -46,29 +46,20 @@ class MainScreenTableViewController: UIViewController, UITableViewDataSource, UI
         if isFiltering {
             return filteredTasks.count
         }
-        return tasks.isEmpty ? 0 : tasks.count
+        return tasks.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath:  IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath) as! MainScreenTableViewCell
 
-        var task = Task()
-
-        if isFiltering {
-            task = filteredTasks[indexPath.row]
-        } else {
-            task = tasks[indexPath.row]
-        }
+        let task = isFiltering ? filteredTasks[indexPath.row] : tasks[indexPath.row]
         
         cell.taskNameLabel.text = task.name
         cell.taskLocationLabel.text = task.location
         cell.taskDateLabel.text = task.date
         cell.taskImage.image = UIImage(data: task.imageData!)
-
-        // to make image view to be circle
-        cell.taskImage.layer.cornerRadius = cell.taskImage.frame.size.height / 2
-        cell.taskImage.clipsToBounds = true
-
+        cell.cosmosView.rating = task.rating
+        
         return cell
     }
 
@@ -95,12 +86,8 @@ class MainScreenTableViewController: UIViewController, UITableViewDataSource, UI
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            var task: Task
-            if isFiltering {
-                task = filteredTasks[indexPath.row]
-            } else {
-                task = tasks[indexPath.row]
-            }
+            
+            let task = isFiltering ? filteredTasks[indexPath.row] : tasks[indexPath.row]
             let newTaskVC = segue.destination as! NewTaskTableViewController
             newTaskVC.currentTask = task
         }
