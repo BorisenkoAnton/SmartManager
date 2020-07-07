@@ -124,7 +124,7 @@ class MainScreenTableViewController: UIViewController, UITableViewDataSource, UI
         if segmentedControl.selectedSegmentIndex == 0 {
             tasks = tasks.sorted(byKeyPath: "date", ascending: ascendingSorting)
         } else {
-            tasks = tasks.sorted(byKeyPath: "name", ascending: ascendingSorting)
+            tasks = tasks.sorted(byKeyPath: "rating", ascending: ascendingSorting)
         }
         
         tableView.reloadData()
