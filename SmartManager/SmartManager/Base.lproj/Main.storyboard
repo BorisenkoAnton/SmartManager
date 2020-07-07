@@ -221,32 +221,48 @@
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="PJm-25-d7P">
-                                                    <rect key="frame" x="96" y="8" width="302" height="61.5"/>
+                                                    <rect key="frame" x="96" y="8" width="208" height="61.5"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1s-Mi-xMQ">
-                                                            <rect key="frame" x="0.0" y="0.0" width="302" height="22"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="208" height="22"/>
                                                             <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="19"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kN4-N7-utR">
-                                                            <rect key="frame" x="0.0" y="25" width="302" height="18"/>
+                                                            <rect key="frame" x="0.0" y="25" width="208" height="18"/>
                                                             <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="15"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fVQ-YY-VPN">
-                                                            <rect key="frame" x="0.0" y="46" width="302" height="15.5"/>
+                                                            <rect key="frame" x="0.0" y="46" width="208" height="15.5"/>
                                                             <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="13"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
                                                 </stackView>
+                                                <view contentMode="scaleToFill" placeholderIntrinsicWidth="90" placeholderIntrinsicHeight="14" translatesAutoresizingMaskIntoConstraints="NO" id="cEb-ve-erQ" customClass="CosmosView" customModule="Cosmos">
+                                                    <rect key="frame" x="312" y="32" width="90" height="14"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="90" id="qP5-tl-jea"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="starSize">
+                                                            <real key="value" value="14"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="image" keyPath="filledImage" value="filledStar"/>
+                                                        <userDefinedRuntimeAttribute type="image" keyPath="emptyImage" value="emptyStar"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="cEb-ve-erQ" firstAttribute="trailing" secondItem="MZ4-aJ-iZB" secondAttribute="trailingMargin" constant="8" id="EEf-8Q-sHC"/>
+                                                <constraint firstItem="cEb-ve-erQ" firstAttribute="leading" secondItem="PJm-25-d7P" secondAttribute="trailing" constant="8" id="IXW-s7-fsA"/>
                                                 <constraint firstItem="d9P-88-BRI" firstAttribute="centerY" secondItem="MZ4-aJ-iZB" secondAttribute="centerY" id="JyD-5J-lVv"/>
-                                                <constraint firstAttribute="trailing" secondItem="PJm-25-d7P" secondAttribute="trailing" constant="16" id="M13-NQ-gX2"/>
+                                                <constraint firstItem="cEb-ve-erQ" firstAttribute="centerY" secondItem="MZ4-aJ-iZB" secondAttribute="centerY" id="KZ9-Sk-9JZ"/>
                                                 <constraint firstItem="PJm-25-d7P" firstAttribute="leading" secondItem="d9P-88-BRI" secondAttribute="trailing" constant="16" id="cbd-fk-dPQ"/>
                                                 <constraint firstAttribute="bottom" secondItem="PJm-25-d7P" secondAttribute="bottom" constant="8" id="dTI-LK-bSl"/>
                                                 <constraint firstItem="PJm-25-d7P" firstAttribute="top" secondItem="MZ4-aJ-iZB" secondAttribute="top" constant="8" id="ko3-Rx-Hti"/>
@@ -254,6 +270,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="cosmosView" destination="cEb-ve-erQ" id="lCV-RM-wbT"/>
                                             <outlet property="taskDateLabel" destination="fVQ-YY-VPN" id="OPT-Wx-Xy1"/>
                                             <outlet property="taskImage" destination="d9P-88-BRI" id="cw3-SO-Wcv"/>
                                             <outlet property="taskLocationLabel" destination="kN4-N7-utR" id="rvf-na-xr4"/>
@@ -358,5 +375,7 @@
     <resources>
         <image name="AZ" width="25" height="24"/>
         <image name="Photo" width="195" height="196"/>
+        <image name="emptyStar" width="255" height="256"/>
+        <image name="filledStar" width="237.5" height="238"/>
     </resources>
 </document>
