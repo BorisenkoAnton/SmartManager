@@ -66,16 +66,38 @@ class NewTaskTableViewController: UITableViewController {
         }
     }
     
-    func saveTask() {
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        var image: UIImage?
+        guard
+            let identifier = segue.identifier,
+            let mapVC = segue.destination as? MapViewController
+        else { return }
         
-        if imageIsChanged {
-            image = taskImage.image
-        } else {
-            image = UIImage(named: "default_task")
+        mapVC.incomeSegueIdentifier = identifier
+        mapVC.mapViewControllerDelegate = self
+        
+        if identifier == "showTask" {
+            mapVC.task.imageData = taskImage.image?.pngData()
+            mapVC.task.name = taskNameTextField.text!
+            mapVC.task.location = taskLocationTextField.text
+            
+            let dateFormatter = DateFormatter()
+            let dateTemplate = "yyyy/MM/dd hh:mm"
+            let dateLocale = Locale(identifier: "ru")
+            let dateFormat =  DateFormatter.dateFormat(fromTemplate: dateTemplate, options: 0, locale: dateLocale)
+            dateFormatter.dateFormat = dateFormat
+            let date = dateFormatter.string(from: taskDatePicker.date)
+            
+            mapVC.task.date = date
         }
         
+    }
+    
+    func saveTask() {
+        
+        let image = imageIsChanged ? taskImage.image : UIImage(named: "default_task")
         let imageData = image?.pngData()
         
         let dateFormatter = DateFormatter()
@@ -187,5 +209,12 @@ extension NewTaskTableViewController: UIImagePickerControllerDelegate, UINavigat
         imageIsChanged = true
         
         dismiss(animated: true)
+    }
+}
+
+extension NewTaskTableViewController: MapViewControllerDelegate {
+    
+    func getAddress(_ address: String?) {
+        taskLocationTextField.text = address
     }
 }
