@@ -73,7 +73,7 @@ import UIKit
         
         // Load button image
         let bundle = Bundle(for: type(of: self))
-        let filledStar = UIImage(named: "filledStar",
+        let filledStar = UIImage(named: "goldFilledStar",
                                  in: bundle,
                                  compatibleWith: self.traitCollection)
         
