@@ -438,7 +438,7 @@
                         <viewLayoutGuide key="safeArea" id="8R5-RW-72x"/>
                     </view>
                     <navigationItem key="navigationItem" title="Smart Manager" largeTitleDisplayMode="never" id="pOn-fC-J01">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="AZ" id="tuh-6k-4y5">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="ZA" id="tuh-6k-4y5">
                             <connections>
                                 <action selector="reversedSorting:" destination="nBS-xl-brT" id="Goj-7B-PoP"/>
                             </connections>
@@ -504,11 +504,11 @@
         <segue reference="eTZ-PW-0M5"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="AZ" width="25" height="24"/>
         <image name="GetDirection" width="50" height="50"/>
         <image name="Location" width="128" height="128"/>
         <image name="Photo" width="195" height="196"/>
         <image name="Pin" width="42" height="42"/>
+        <image name="ZA" width="25" height="24"/>
         <image name="cancel" width="128" height="128"/>
         <image name="map" width="50" height="50"/>
         <image name="placeholderOrange" width="256" height="256"/>

@@ -111,9 +111,9 @@ class MainScreenTableViewController: UIViewController, UITableViewDataSource, UI
         ascendingSorting.toggle()
         
         if ascendingSorting {
-            reversedSortingButton.image = #imageLiteral(resourceName: "AZ")
-        } else {
             reversedSortingButton.image = #imageLiteral(resourceName: "ZA")
+        } else {
+            reversedSortingButton.image = #imageLiteral(resourceName: "AZ")
         }
         
         sorting()
